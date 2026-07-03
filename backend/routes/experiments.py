@@ -136,4 +136,50 @@ def log_event(experiment_id):
     }), 201
     
     
+@experiments_bp.route("/experiments/<experiment_id>/results", methods=["GET"])
+def get_results(experiment_id):
+    try:
+        experiment = experiments.find_one({"_id": ObjectId(experiment_id)})
+    except Exception:
+        return jsonify({"error": "invalid experiment id"}), 400
+
+    if not experiment:
+        return jsonify({"error": "experiment not found"}), 404
+
+    variant_assignments = {}
+    for variant in experiment["variants"]:
+        count = assignments.count_documents({
+            "experiment_id": experiment_id,
+            "variant": variant
+        })
+        variant_assignments[variant] = count
+
+    variant_conversions = {}
+    for variant in experiment["variants"]:
+        count = events.count_documents({
+            "experiment_id": experiment_id,
+            "variant": variant
+        })
+        variant_conversions[variant] = count
+
+    results = []
+    for variant in experiment["variants"]:
+        assigned = variant_assignments[variant]
+        converted = variant_conversions[variant]
+        rate = round((converted / assigned * 100), 2) if assigned > 0 else 0
+
+        results.append({
+            "variant": variant,
+            "assigned": assigned,
+            "converted": converted,
+            "conversion_rate": rate
+        })
+
+    return jsonify({
+        "experiment_id": experiment_id,
+        "name": experiment["name"],
+        "status": experiment["status"],
+        "results": results
+    })
+    
     
