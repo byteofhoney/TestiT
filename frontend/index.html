@@ -1,32 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+   
   <meta charset="UTF-8">
+   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TesiT — A/B testing with one API call.</title>
+    <title>TesiT — A/B testing with one API call.</title>
+   
   <link rel="preconnect" href="https://fonts.googleapis.com">
+   
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+   
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+    <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg:        #0F0F0F;
-      --bg-nav:    #111111;
-      --surface:   #1C1C1E;
-      --accent:    #7c1fff;
-      --accent-dim:#4a0f99;
-      --text:      #FFFFFF;
+      --bg: #0F0F0F;
+      --bg-nav: #111111;
+      --surface: #1C1C1E;
+      --accent: #7c1fff;
+      --accent-dim: #4a0f99;
+      --text: #FFFFFF;
       --text-body: #AAAAAA;
-      --text-muted:#888888;
-      --border:    #2a2a2a;
+      --text-muted: #888888;
+      --border: #2a2a2a;
       --radius-card: 14px;
       --radius-pill: 999px;
       --font-sans: 'IBM Plex Sans', sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--bg);
@@ -78,7 +94,9 @@
       transition: color 0.15s;
     }
 
-    .nav-links a:hover { color: var(--text); }
+    .nav-links a:hover {
+      color: var(--text);
+    }
 
     .nav-cta {
       background: var(--accent);
@@ -92,7 +110,9 @@
       letter-spacing: 0.02em;
     }
 
-    .nav-cta:hover { background: var(--accent-dim); }
+    .nav-cta:hover {
+      background: var(--accent-dim);
+    }
 
     /* ── HERO ── */
     .hero {
@@ -106,20 +126,33 @@
     }
 
     .eyebrow {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       font-family: var(--font-mono);
       font-size: 11px;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 4px 14px;
-      border-radius: var(--radius-pill);
+      color: var(--text-muted);
       margin-bottom: 32px;
     }
 
+    .eyebrow::before {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--text-muted);
+    }
+
+    .eyebrow::after {
+      content: '';
+      width: 18px;
+      height: 1px;
+      background: var(--text-muted);
+    }
+
     .hero h1 {
-      font-size: clamp(32px, 5vw, 52px);
+      font-size: clamp(32px, 5vw, 44px);
       font-weight: 600;
       line-height: 1.15;
       letter-spacing: -0.02em;
@@ -159,7 +192,9 @@
       letter-spacing: 0.01em;
     }
 
-    .btn-primary:hover { background: var(--accent-dim); }
+    .btn-primary:hover {
+      background: var(--accent-dim);
+    }
 
     .btn-ghost {
       background: transparent;
@@ -174,7 +209,10 @@
       letter-spacing: 0.01em;
     }
 
-    .btn-ghost:hover { border-color: #555; color: var(--text); }
+    .btn-ghost:hover {
+      border-color: #555;
+      color: var(--text);
+    }
 
     /* ── CODE STRIP ── */
     .code-strip {
@@ -266,13 +304,19 @@
       overflow: hidden;
     }
 
-    .step:first-child { border-radius: var(--radius-card) 0 0 var(--radius-card); }
-    .step:last-child  { border-radius: 0 var(--radius-card) var(--radius-card) 0; }
+    .step:first-child {
+      border-radius: var(--radius-card) 0 0 var(--radius-card);
+    }
+
+    .step:last-child {
+      border-radius: 0 var(--radius-card) var(--radius-card) 0;
+    }
 
     .step::before {
       content: '';
       position: absolute;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 3px;
       height: 100%;
       background: var(--accent);
@@ -280,7 +324,9 @@
       transition: opacity 0.2s;
     }
 
-    .step:hover::before { opacity: 1; }
+    .step:hover::before {
+      opacity: 1;
+    }
 
     .step-num {
       font-family: var(--font-mono);
@@ -335,14 +381,17 @@
       grid-column: span 4;
       border-radius: var(--radius-card) 0 0 0;
     }
+
     .bento-card:nth-child(2) {
       grid-column: span 2;
       border-radius: 0 var(--radius-card) 0 0;
     }
+
     .bento-card:nth-child(3) {
       grid-column: span 2;
       border-radius: 0 0 0 var(--radius-card);
     }
+
     .bento-card:nth-child(4) {
       grid-column: span 4;
       border-radius: 0 0 var(--radius-card) 0;
@@ -373,14 +422,18 @@
 
     .bento-card .accent-bar {
       position: absolute;
-      bottom: 0; left: 0;
-      width: 100%; height: 2px;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
       background: linear-gradient(90deg, var(--accent), transparent);
       opacity: 0;
       transition: opacity 0.2s;
     }
 
-    .bento-card:hover .accent-bar { opacity: 1; }
+    .bento-card:hover .accent-bar {
+      opacity: 1;
+    }
 
     .stat-block {
       margin-top: 20px;
@@ -491,16 +544,38 @@
       text-decoration: none;
     }
 
-    footer a:hover { color: var(--text); }
+    footer a:hover {
+      color: var(--text);
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 720px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      .steps { grid-template-columns: 1fr; gap: 2px; }
-      .step:first-child { border-radius: var(--radius-card) var(--radius-card) 0 0; }
-      .step:last-child  { border-radius: 0 0 var(--radius-card) var(--radius-card); }
-      .bento { grid-template-columns: 1fr; padding: 0 20px 60px; }
+      nav {
+        padding: 0 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .steps {
+        grid-template-columns: 1fr;
+        gap: 2px;
+      }
+
+      .step:first-child {
+        border-radius: var(--radius-card) var(--radius-card) 0 0;
+      }
+
+      .step:last-child {
+        border-radius: 0 0 var(--radius-card) var(--radius-card);
+      }
+
+      .bento {
+        grid-template-columns: 1fr;
+        padding: 0 20px 60px;
+      }
+
       .bento-card:nth-child(1),
       .bento-card:nth-child(2),
       .bento-card:nth-child(3),
@@ -508,152 +583,179 @@
         grid-column: span 1;
         border-radius: var(--radius-card);
       }
-      .section { padding: 60px 20px; }
-      footer { flex-direction: column; gap: 12px; text-align: center; }
+
+      .section {
+        padding: 60px 20px;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; }
+
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <a href="/" class="nav-logo">Tesi<span>T</span></a>
-    <ul class="nav-links">
-      <li><a href="#how-it-works">How it works</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="https://github.com" target="_blank">GitHub</a></li>
-    </ul>
-    <a href="dashboard.html" class="nav-cta">Open dashboard</a>
-  </nav>
+    <!-- NAV -->
+    <nav>
+        <a href="/" class="nav-logo">Tesi<span>T</span></a>
+        <ul class="nav-links">
+            <li><a href="#how-it-works">How it works</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="https://github.com" target="_blank">GitHub</a></li>
+          </ul>
+        <a href="dashboard.html" class="nav-cta">Open dashboard</a>
+      </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <span class="eyebrow">open source &middot; self-hostable</span>
-    <h1>A/B testing with <em>one API call.</em></h1>
-    <p>Split traffic, collect metrics and compare results. No SDK. No pricing page. No lock-in.</p>
-    <div class="hero-actions">
-      <a href="dashboard.html" class="btn-primary">Open dashboard</a>
-      <a href="https://github.com" target="_blank" class="btn-ghost">View on GitHub</a>
-    </div>
-  </section>
-
-  <!-- CODE STRIP -->
-  <div class="code-strip">
-    <div class="code-strip-inner">
-      <div class="code-label">three endpoints. that is the whole API.</div>
-      <div class="code-line">
-        <span class="method">POST</span>
-        <span class="endpoint">/experiments</span>
-        <span class="comment">— create an experiment with variants</span>
-      </div>
-      <div class="code-line">
-        <span class="method">GET</span>
-        <span class="endpoint">/experiments/:id/assign?user_id=xyz</span>
-        <span class="comment">— assign a user, get their variant back</span>
-      </div>
-      <div class="code-line">
-        <span class="method">POST</span>
-        <span class="endpoint">/experiments/:id/event</span>
-        <span class="comment">— log a conversion</span>
-      </div>
-      <div class="code-line">
-        <span class="method">GET</span>
-        <span class="endpoint">/experiments/:id/results</span>
-        <span class="comment">— see which variant is winning</span>
-      </div>
-    </div>
+    <!-- HERO -->
+   
+  <div style="background: var(--bg);">
+      <section class="hero">
+          <span class="eyebrow">open source | self hostable</span>
+          <h1>A/B testing with <em>one API call.</em></h1>
+          <p>Split traffic, collect metrics, and compare results. No SDK. No pricing page. No lock-in.</p>
+          <div class="hero-actions">
+              <a href="dashboard.html" class="btn-primary">Open dashboard</a>
+              <a href="https://github.com" target="_blank" class="btn-ghost">View on GitHub</a>
+            </div>
+        </section>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="section" id="how-it-works">
-    <div class="section-label">how it works</div>
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">01</div>
-        <h3>Create an experiment</h3>
-        <p>Send a <code>POST</code> with a name and a list of variants. Get back an experiment ID. That is it.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">02</div>
-        <h3>Assign users</h3>
-        <p>Call <code>/assign</code> with any user ID. TesiT hashes the ID to a variant — same user always gets the same result.</p>
-      </div>
-      <div class="step">
-        <div class="step-num">03</div>
-        <h3>Log conversions</h3>
-        <p>When something meaningful happens, call <code>/event</code>. TesiT ties the event back to the assigned variant automatically.</p>
-      </div>
-    </div>
-  </div>
+    <!-- CODE STRIP -->
+    <div class="code-strip">
+        <div class="code-strip-inner">
+            <div class="code-label">three endpoints</div>
+            <div class="code-line">
+                <span class="method">POST</span>
+                <span class="endpoint">/experiments</span>
+                <span class="comment">— create an experiment with variants</span>
+              </div>
+            <div class="code-line">
+                <span class="method">GET</span>
+                <span class="endpoint">/experiments/:id/assign?user_id=xyz</span>
+                <span class="comment">— assign a user, get their variant back</span>
+              </div>
+            <div class="code-line">
+                <span class="method">POST</span>
+                <span class="endpoint">/experiments/:id/event</span>
+                <span class="comment">— log a conversion</span>
+              </div>
+            <div class="code-line">
+                <span class="method">GET</span>
+                <span class="endpoint">/experiments/:id/results</span>
+                <span class="comment">— see which variant is winning</span>
+              </div>
+          </div>
+      </div>
 
-  <!-- BENTO FEATURES -->
-  <div class="bento" id="features">
-    <div class="bento-card">
-      <div class="card-tag">stable assignment</div>
-      <h3>Same user. Same variant. Every time.</h3>
-      <p>Assignments are hash-based, not random. No session storage, no cookies required. A user_id always maps to the same variant for the lifetime of the experiment.</p>
-      <div class="stat-block">
-        <div class="stat">
-          <span class="stat-val">0ms</span>
-          <span class="stat-label">db lookup for known users</span>
-        </div>
-        <div class="stat">
-          <span class="stat-val">100%</span>
-          <span class="stat-label">assignment consistency</span>
-        </div>
-      </div>
-      <div class="accent-bar"></div>
-    </div>
+    <!-- HOW IT WORKS -->
+    <div class="section" id="how-it-works">
+        <div class="section-label">how it works</div>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">01</div>
+                <h3>Create an experiment</h3>
+                <p>Send a <code>POST</code> with a name and a list of variants. Get back an experiment ID. That is it.
+        </p>
+              </div>
+            <div class="step">
+                <div class="step-num">02</div>
+                <h3>Assign users</h3>
+                <p>Call <code>/assign</code> with any user ID. TesiT hashes the ID to a variant, same user always gets
+          the same result.</p>
+              </div>
+            <div class="step">
+                <div class="step-num">03</div>
+                <h3>Log conversions</h3>
+                <p>When something meaningful happens, call <code>/event</code>. TesiT ties the event back to the
+          assigned variant automatically.</p>
+              </div>
+          </div>
+      </div>
 
-    <div class="bento-card">
-      <div class="card-tag">results</div>
-      <h3>Conversion rates per variant</h3>
-      <div class="mini-bars">
-        <div class="bar-row">
-          <span class="bar-name">blue</span>
-          <div class="bar-track"><div class="bar-fill" style="width: 68%"></div></div>
-          <span class="bar-pct">68%</span>
-        </div>
-        <div class="bar-row">
-          <span class="bar-name">green</span>
-          <div class="bar-track"><div class="bar-fill" style="width: 41%; opacity: 0.45"></div></div>
-          <span class="bar-pct">41%</span>
-        </div>
-      </div>
-      <div class="accent-bar"></div>
-    </div>
+    <!-- BENTO FEATURES -->
+    <div class="bento" id="features">
+        <div class="bento-card">
+            <div class="card-tag">stable assignment</div>
+            <h3>Same user. Same variant. Every time.</h3>
+            <p>Assignments are hash-based, not random. No session storage, no cookies required. A user_id always maps to
+        the same variant for the lifetime of the experiment.</p>
+            <div class="stat-block">
+                <div class="stat">
+                    <span class="stat-val">0ms</span>
+                    <span class="stat-label">db lookup for known users</span>
+                  </div>
+                <div class="stat">
+                    <span class="stat-val">100%</span>
+                    <span class="stat-label">assignment consistency</span>
+                  </div>
+              </div>
+            <div class="accent-bar"></div>
+          </div>
 
-    <div class="bento-card">
-      <div class="card-tag">storage</div>
-      <h3>MongoDB Atlas. Free tier fits most projects.</h3>
-      <p>Three collections. No migrations. No schema to manage.</p>
-      <div class="accent-bar"></div>
-    </div>
+        <div class="bento-card">
+            <div class="card-tag">results</div>
+            <h3>Conversion rates per variant</h3>
+            <div class="mini-bars">
+                <div class="bar-row">
+                    <span class="bar-name">blue</span>
+                    <div class="bar-track">
+            <div class="bar-fill" style="width: 68%"></div>
+          </div>
+                    <span class="bar-pct">68%</span>
+                  </div>
+                <div class="bar-row">
+                    <span class="bar-name">green</span>
+                    <div class="bar-track">
+            <div class="bar-fill" style="width: 41%; opacity: 0.45"></div>
+          </div>
+                    <span class="bar-pct">41%</span>
+                  </div>
+              </div>
+            <div class="accent-bar"></div>
+          </div>
 
-    <div class="bento-card">
-      <div class="card-tag">open source</div>
-      <h3>Self-host it. Fork it. Break it. It is yours.</h3>
-      <p>No usage limits, no billing page, no vendor to call. Deploy to Render in under five minutes.</p>
-      <div class="accent-bar"></div>
-    </div>
-  </div>
+        <div class="bento-card">
+            <div class="card-tag">storage</div>
+            <h3>MongoDB Atlas. Free tier fits most projects.</h3>
+            <p>Three collections. No migrations. No schema to manage.</p>
+            <div class="accent-bar"></div>
+          </div>
 
-  <!-- FINAL CTA -->
-  <section class="final-cta">
-    <h2>Start your first experiment<br>in under two minutes.</h2>
-    <p>No account required. Run it locally or deploy to Render.</p>
-    <a href="dashboard.html" class="btn-primary">Open dashboard</a>
-  </section>
+        <div class="bento-card">
+            <div class="card-tag">open source</div>
+            <h3>Self host it. Fork it. Break it. It is yours.</h3>
+            <p>No usage limits, no billing page, no vendor to call when something breaks. Deploy to Render in under five
+        minutes.</p>
+            <div class="accent-bar"></div>
+          </div>
+      </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <span>TesiT &mdash; open source A/B testing</span>
-    <a href="https://github.com" target="_blank">GitHub</a>
-  </footer>
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <h2>Start your first experiment<br>in under two minutes.</h2>
+        <p>No account required. Run it locally or deploy to Render.</p>
+        <a href="dashboard.html" class="btn-primary">Open dashboard</a>
+      </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <span>TesiT | open source A/B testing</span>
+        <a href="https://github.com" target="_blank">GitHub</a>
+      </footer>
 
 </body>
+
 </html>
