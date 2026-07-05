@@ -38,6 +38,20 @@ def create_experiment():
     }), 201
 
 
+@experiments_bp.route("/experiments", methods=["GET"])
+def list_experiments():
+    all_experiments = experiments.find().sort("created_at", -1)
+    result = []
+    for exp in all_experiments:
+        result.append({
+            "id": str(exp["_id"]),
+            "name": exp["name"],
+            "variants": exp["variants"],
+            "status": exp["status"],
+            "created_at": exp["created_at"].isoformat()
+        })
+    return jsonify(result)
+
 @experiments_bp.route("/experiments/<experiment_id>/assign", methods=["GET"])
 def assign_variant(experiment_id):
     
