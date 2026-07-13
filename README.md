@@ -1,4 +1,16 @@
+<div align="center">
+  
 # TesiT
+  
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB_Atlas-cloud-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)]()
+[![Status](https://img.shields.io/badge/license-MIT-red?style=for-the-badge)]()
+
+</div>
+
+
 
 Open source A/B testing platform. Self hostable. Free.
 
@@ -49,8 +61,8 @@ pip install -r requirements.txt
 ```
 
 Create a `.env` file in the backend folder:
-MONGO_URI=your_mongodb_atlas_connection_string
-SECRET_KEY=any_random_string
+MONGO_URI=mongodb_atlas_connection_string
+SECRET_KEY=enter-a-random-string
 
 Then run:
 
