@@ -9,6 +9,7 @@ This is not a big open source org with a committee. If your change makes the pro
 ## Before you start
 
 Check the open issues first. If something is already being worked on, leave a comment rather than opening a duplicate. If you have a new idea, open an issue before writing code so we can agree it is worth building. 
+Before starting work on an issue, claim it by leaving a comment saying you are working on it. If an issue is already assigned to someone, do not start working on it. If you are unsure whether it is still active, ask in the comments.
 
 ---
 
@@ -17,7 +18,7 @@ Check the open issues first. If something is already being worked on, leave a co
 Fork the repo, then clone your fork:
 
 ```bash
-git clone https://github.com/byteofhoney/testit.git
+git clone https://github.com/user-name/testit.git
 cd testit
 ```
 
@@ -32,8 +33,10 @@ pip install -r backend/requirements.txt
 
 Create a `.env` file inside the `backend/` folder:
 
-MONGO_URI=mongodb_atlas_connection_string
-SECRET_KEY=enter-a-random-string
+
+- MONGO_URI=mongodb_atlas_connection_string
+
+- SECRET_KEY=enter-a-random-string
 
 Run the backend:
 
@@ -43,6 +46,7 @@ python app.py
 ```
 
 Open `frontend/index.html` or `frontend/dashboard.html` directly in your browser.
+
 No build step, no npm, no bundler.
 
 ---
@@ -56,9 +60,10 @@ fix/short-description
 docs/short-description
 
 -> Examples:
-feat/api-key-auth
-fix/duplicate-events
-docs/update-readme
+
+- feat/api-key-auth
+- fix/duplicate-events
+- docs/update-readme
 
 ---
 
@@ -81,4 +86,4 @@ that way unless there is a strong reason not to.
 
 ## Questions
 
-Open an issue and tag it `question`. 
+Open an issue and tag it " `question` ". 
