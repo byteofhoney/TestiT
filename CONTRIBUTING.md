@@ -55,9 +55,9 @@ No build step, no npm, no bundler.
 
 Branch off `main` and use this format:
 
-feat/short-description
-fix/short-description
-docs/short-description
+- feat/short-description
+- fix/short-description
+- docs/short-description
 
 -> Examples:
 
@@ -86,4 +86,4 @@ that way unless there is a strong reason not to.
 
 ## Questions
 
-Open an issue and tag it " `question` ". 
+Open an issue and tag it  " `question` ". 
