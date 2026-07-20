@@ -616,6 +616,15 @@
 
     .form-error.visible { display: block; }
 
+    .results-timestamp {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      padding: 12px 40px 0;
+      text-align: right;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; }
     }
@@ -765,6 +774,8 @@
     }
 
     //  SELECT EXPERIMENT 
+    let refreshInterval = null;
+
     async function selectExperiment(id) {
       activeId = id;
       renderList();
@@ -774,6 +785,20 @@
       resultsPanel.innerHTML = `<div class="panel-loading">loading results...</div>`;
       resultsPanel.classList.add('visible');
 
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+      }
+
+      await fetchResults(id);
+
+      const exp = experiments.find(e => e.id === id);
+      if (exp && exp.status === 'active') {
+        refreshInterval = setInterval(() => fetchResults(id), 30000);
+      }
+    }
+
+    async function fetchResults(id) {
       try {
         const res = await fetch(`${API}/experiments/${id}/results`);
         const data = await res.json();
@@ -793,7 +818,9 @@
       const maxRate = Math.max(...data.results.map(v => v.conversion_rate), 1);
 
       resultsPanel.innerHTML = `
+        <div class="results-timestamp">updated ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'})}</div>
         <div class="results-top">
+
           <div>
             <div class="results-name">${data.name}</div>
             <div class="results-id">${data.experiment_id}</div>
