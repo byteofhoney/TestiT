@@ -765,6 +765,8 @@
     }
 
     //  SELECT EXPERIMENT 
+    let refreshInterval = null;
+
     async function selectExperiment(id) {
       activeId = id;
       renderList();
@@ -774,6 +776,20 @@
       resultsPanel.innerHTML = `<div class="panel-loading">loading results...</div>`;
       resultsPanel.classList.add('visible');
 
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+        refreshInterval = null;
+      }
+
+      await fetchResults(id);
+
+      const exp = experiments.find(e => e.id === id);
+      if (exp && exp.status === 'active') {
+        refreshInterval = setInterval(() => fetchResults(id), 30000);
+      }
+    }
+
+    async function fetchResults(id) {
       try {
         const res = await fetch(`${API}/experiments/${id}/results`);
         const data = await res.json();
