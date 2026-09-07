@@ -27,6 +27,15 @@ Assign users to variants, log conversion events and compare results through a da
 
 ---
 
+## Live frontend: 
+(https://byteofhoney.github.io/TestiT/)
+
+> The frontend is live but the dashboard requires a running backend to function.
+> See the running locally section below to set up the API.
+
+
+---
+
 ## API
 
 **Create an experiment**
