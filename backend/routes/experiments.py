@@ -40,9 +40,19 @@ def create_experiment():
 
 @experiments_bp.route("/experiments", methods=["GET"])
 def list_experiments():
-    all_experiments = experiments.find().sort("created_at", -1)
+    status = request.args.get("status")
+    limit = int(request.args.get("limit", 20))
+    offset = int(request.args.get("offset", 0))
+
+    query = {}
+    if status:
+        query["status"] = status
+
+    total = experiments.count_documents(query)
+    cursor = experiments.find(query).sort("created_at", -1).skip(offset).limit(limit)
+
     result = []
-    for exp in all_experiments:
+    for exp in cursor:
         result.append({
             "id": str(exp["_id"]),
             "name": exp["name"],
@@ -50,7 +60,14 @@ def list_experiments():
             "status": exp["status"],
             "created_at": exp["created_at"].isoformat()
         })
-    return jsonify(result)
+
+    return jsonify({
+        "experiments": result,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "has_more": (offset + limit) < total
+    })
 
 @experiments_bp.route("/experiments/<experiment_id>/assign", methods=["GET"])
 def assign_variant(experiment_id):
