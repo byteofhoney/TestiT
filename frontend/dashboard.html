@@ -628,6 +628,29 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { transition: none !important; }
     }
+
+  .btn-load-more 
+  {
+    width: 100%;
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    cursor: pointer;
+    margin-top: 8px;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .btn-load-more:hover 
+  {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
   </style>
 </head>
 <body>
@@ -722,6 +745,7 @@
 
     //  STATE 
     let experiments = [];
+    let hasMore = false;
     let activeId = null;
 
     // ELEMENTS 
@@ -740,16 +764,27 @@
     const formError     = document.getElementById('form-error');
 
     // LOAD EXPERIMENTS 
-    async function loadExperiments() {
-      try {
-        const res = await fetch(`${API}/experiments`);
-        const data = await res.json();
-        experiments = data;
-        renderList();
-      } catch (e) {
-        expList.innerHTML = `<div class="empty-list"><p style="color:#ff6b6b">Could not reach the API.<br>Is Flask running?</p></div>`;
+let currentOffset = 0;
+const PAGE_LIMIT = 20;
+
+  async function loadExperiments(offset = 0) {
+    try {
+      const res = await fetch(`${API}/experiments?limit=${PAGE_LIMIT}&offset=${offset}`);
+      const data = await res.json();
+
+      if (offset === 0) {
+        experiments = data.experiments;
+      } else {
+        experiments = [...experiments, ...data.experiments];
       }
+
+      hasMore = data.has_more;
+      currentOffset = offset + data.experiments.length;
+      renderList();
+    } catch (e) {
+      expList.innerHTML = `<div class="empty-list"><p style="color:#ff6b6b">Could not reach the API.<br>Is Flask running?</p></div>`;
     }
+  }
 
     // RENDER LIST 
     function renderList() {
@@ -771,6 +806,14 @@
       expList.querySelectorAll('.exp-item').forEach(el => {
         el.addEventListener('click', () => selectExperiment(el.dataset.id));
       });
+
+      if (hasMore) {
+        const loadMoreBtn = document.createElement('button');
+        loadMoreBtn.className = 'btn-load-more';
+        loadMoreBtn.textContent = 'Load more';
+        loadMoreBtn.addEventListener('click', () => loadExperiments(currentOffset));
+        expList.appendChild(loadMoreBtn);
+      }
     }
 
     //  SELECT EXPERIMENT 
