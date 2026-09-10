@@ -121,7 +121,6 @@ def assign_variant(experiment_id):
         "already_assigned": False
     }), 201
 
-
 @experiments_bp.route("/experiments/<experiment_id>/event", methods=["POST"])
 def log_event(experiment_id):
     data = request.get_json()
@@ -148,6 +147,18 @@ def log_event(experiment_id):
     if not assignment:
         return jsonify({"error": "user has no assignment for this experiment"}), 400
 
+    existing_event = events.find_one({
+        "experiment_id": experiment_id,
+        "user_id": user_id,
+        "event": event_name
+    })
+
+    if existing_event:
+        return jsonify({
+            "error": f"user {user_id} already logged '{event_name}' for this experiment",
+            "duplicate": True
+        }), 409
+
     event = {
         "experiment_id": experiment_id,
         "user_id": user_id,
@@ -165,8 +176,7 @@ def log_event(experiment_id):
         "event": event_name,
         "logged": True
     }), 201
-    
-    
+
 @experiments_bp.route("/experiments/<experiment_id>/results", methods=["GET"])
 def get_results(experiment_id):
     try:
