@@ -651,6 +651,36 @@
     color: var(--accent);
   }
 
+  .results-id {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-copy-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  transition: color 0.15s, background 0.15s;
+}
+
+.btn-copy-id:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.btn-copy-id.copied {
+  color: #3ddc84;
+}
   </style>
 </head>
 <body>
@@ -866,7 +896,18 @@ const PAGE_LIMIT = 20;
 
           <div>
             <div class="results-name">${data.name}</div>
-            <div class="results-id">${data.experiment_id}</div>
+            
+            <div class="results-id">
+              ${data.experiment_id}
+              <button class="btn-copy-id" onclick="copyId('${data.experiment_id}')" title="Copy ID">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                  <rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+                  <path d="M3 9H2a1 1 0 01-1-1V2a1 1 0 011-1h6a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+                <span class="copy-label">copy</span>
+              </button>
+            </div>
+
           </div>
           <div class="status-pill ${data.status !== 'active' ? 'inactive' : ''}">
             <div class="status-dot ${data.status !== 'active' ? 'inactive' : ''}"></div>
@@ -1023,6 +1064,19 @@ const PAGE_LIMIT = 20;
       formError.textContent = msg;
       formError.classList.add('visible');
     }
+
+    function copyId(id) {
+      navigator.clipboard.writeText(id).then(() => {
+        const btn = document.querySelector('.btn-copy-id');
+        const label = btn.querySelector('.copy-label');
+        btn.classList.add('copied');
+        label.textContent = 'copied';
+        setTimeout(() => {
+          btn.classList.remove('copied');
+          label.textContent = 'copy';
+        }, 2000);
+      });
+}
 
     // INIT 
     loadExperiments();
