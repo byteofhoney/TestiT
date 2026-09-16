@@ -681,6 +681,29 @@
 .btn-copy-id.copied {
   color: #3ddc84;
 }
+
+.sidebar-search {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+  outline: none;
+  margin-top: 10px;
+  letter-spacing: 0.04em;
+  transition: border-color 0.15s;
+}
+
+.sidebar-search:focus {
+  border-color: var(--accent);
+}
+
+.sidebar-search::placeholder {
+  color: var(--text-muted);
+}
   </style>
 </head>
 <body>
@@ -706,6 +729,7 @@
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-title">Experiments</div>
+        <input type="text" class="sidebar-search" id="sidebar-search" placeholder="search experiments...">
       </div>
       <div class="exp-list" id="exp-list">
         <div class="empty-list">
@@ -792,6 +816,36 @@
     const variantsInput = document.getElementById('variants-input');
     const expNameInput  = document.getElementById('exp-name');
     const formError     = document.getElementById('form-error');
+
+    const sidebarSearch = document.getElementById('sidebar-search');
+
+    sidebarSearch.addEventListener('input', () => {
+      const query = sidebarSearch.value.trim().toLowerCase();
+      const items = expList.querySelectorAll('.exp-item');
+      let visibleCount = 0;
+
+      items.forEach(item => {
+        const name = item.querySelector('.exp-item-name').textContent.toLowerCase();
+        if (name.includes(query)) {
+          item.style.display = 'block';
+          visibleCount++;
+        } else {
+          item.style.display = 'none';
+          }
+        });
+
+    const noResults = expList.querySelector('.no-results');
+    if (visibleCount === 0 && query !== '') {
+      if (!noResults) {
+        const msg = document.createElement('div');
+        msg.className = 'no-results empty-list';
+        msg.innerHTML = `<p>No experiments match <strong>${query}</strong></p>`;
+        expList.appendChild(msg);
+      }
+    } else {
+      if (noResults) noResults.remove();
+    }
+  });
 
     // LOAD EXPERIMENTS 
 let currentOffset = 0;
