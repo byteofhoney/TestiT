@@ -829,11 +829,12 @@
     const variantsInput = document.getElementById('variants-input');
     const formError     = document.getElementById('form-error');
 
+    const expNameInput  = document.getElementById('exp-name');
     const nameWarning = document.getElementById('name-warning');
 
     expNameInput.addEventListener('input', () => {
       const val = expNameInput.value.trim().toLowerCase();
-      const match = experiments.some(e => e.name.toLowerCase() === val);
+      const match = experimentsList.some(e => e.name.toLowerCase() === val);
       if (match && val !== '') {
         nameWarning.classList.add('visible');
       } else {
@@ -881,9 +882,10 @@ const PAGE_LIMIT = 20;
       const data = await res.json();
 
       if (offset === 0) {
-        experiments = data.experiments;
-      } else {
-        experiments = [...experiments, ...data.experiments];
+        experimentsList = data.experiments;
+      } 
+      else {
+        experimentsList = [...experimentsList, ...data.experiments];
       }
 
       hasMore = data.has_more;
@@ -896,12 +898,12 @@ const PAGE_LIMIT = 20;
 
     // RENDER LIST 
     function renderList() {
-      if (experiments.length === 0) {
+      if (experimentsList.length === 0) {
         expList.innerHTML = `<div class="empty-list"><p>No experiments yet.<br><strong>Create one to get started.</strong></p></div>`;
         return;
       }
 
-      expList.innerHTML = experiments.map(exp => `
+      expList.innerHTML = experimentsList.map(exp => `
         <div class="exp-item ${exp.id === activeId ? 'active' : ''}" data-id="${exp.id}">
           <div class="exp-item-name">${exp.name}</div>
           <div class="exp-item-meta">
@@ -943,7 +945,7 @@ const PAGE_LIMIT = 20;
 
       await fetchResults(id);
 
-      const exp = experiments.find(e => e.id === id);
+      const exp = experimentsList.find(e => e.id === id);
       if (exp && exp.status === 'active') {
         refreshInterval = setInterval(() => fetchResults(id), 30000);
       }
@@ -1126,7 +1128,7 @@ const PAGE_LIMIT = 20;
           return;
         }
 
-        experiments.unshift(data);
+        experimentsList.unshift(data);
         renderList();
         closeModal();
         selectExperiment(data.id);
