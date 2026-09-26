@@ -222,5 +222,28 @@ def get_results(experiment_id):
         "status": experiment["status"],
         "results": results
     })
-    
+
+@experiments_bp.route("/experiments/<experiment_id>", methods=["PATCH"])
+def stop_experiment(experiment_id):
+    try:
+        experiment = experiments.find_one({"_id": ObjectId(experiment_id)})
+    except Exception:
+        return jsonify({"error": "invalid experiment id"}), 400
+
+    if not experiment:
+        return jsonify({"error": "experiment not found"}), 404
+
+    if experiment["status"] == "inactive":
+        return jsonify({"error": "experiment is already inactive"}), 400
+
+    experiments.update_one(
+        {"_id": ObjectId(experiment_id)},
+        {"$set": {"status": "inactive"}}
+    )
+
+    return jsonify({
+        "id": experiment_id,
+        "status": "inactive",
+        "message": "experiment stopped successfully"
+    })
     
