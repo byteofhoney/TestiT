@@ -657,65 +657,83 @@
   gap: 10px;
 }
 
-.btn-copy-id {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  color: var(--text-muted);
-  cursor: pointer;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  transition: color 0.15s, background 0.15s;
-}
+  .btn-copy-id {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    transition: color 0.15s, background 0.15s;
+  }
 
-.btn-copy-id:hover {
-  color: var(--text);
-  background: var(--surface-2);
-}
+  .btn-copy-id:hover {
+    color: var(--text);
+    background: var(--surface-2);
+  }
 
-.btn-copy-id.copied {
-  color: #3ddc84;
-}
+  .btn-copy-id.copied {
+    color: #3ddc84;
+  }
 
-.sidebar-search {
-  width: 100%;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 7px 10px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text);
-  outline: none;
-  margin-top: 10px;
-  letter-spacing: 0.04em;
-  transition: border-color 0.15s;
-}
+  .sidebar-search {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text);
+    outline: none;
+    margin-top: 10px;
+    letter-spacing: 0.04em;
+    transition: border-color 0.15s;
+  }
 
-.sidebar-search:focus {
-  border-color: var(--accent);
-}
+  .sidebar-search:focus {
+    border-color: var(--accent);
+  }
 
-.sidebar-search::placeholder {
-  color: var(--text-muted);
-}
+  .sidebar-search::placeholder {
+    color: var(--text-muted);
+  }
 
-.name-warning {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: #f0a500;
-  margin-top: 6px;
-  display: none;
-}
+  .name-warning {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #f0a500;
+    margin-top: 6px;
+    display: none;
+  }
 
-.name-warning.visible {
-  display: block;
-}
+  .name-warning.visible {
+    display: block;
+  }
+
+  .btn-stop {
+    background: none;
+    border: 1px solid #ff6b6b;
+    border-radius: var(--radius-pill);
+    padding: 6px 16px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: #ff6b6b;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .btn-stop:hover {
+    background: #ff6b6b;
+    color: var(--bg);
+  }
   </style>
 </head>
 <body>
@@ -989,10 +1007,17 @@ const PAGE_LIMIT = 20;
             </div>
 
           </div>
+          <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
           <div class="status-pill ${data.status !== 'active' ? 'inactive' : ''}">
             <div class="status-dot ${data.status !== 'active' ? 'inactive' : ''}"></div>
             ${data.status}
           </div>
+          ${data.status === 'active' ? `
+            <button class="btn-stop" onclick="stopExperiment('${data.experiment_id}')">
+              Stop experiment
+            </button>
+          ` : ''}
+        </div>
         </div>
 
         <div class="stats-row">
@@ -1157,6 +1182,29 @@ const PAGE_LIMIT = 20;
         }, 2000);
       });
 }
+  async function stopExperiment(id) {
+    const confirmed = confirm('Stop this experiment? New users will no longer be assigned to it.');
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`${API}/experiments/${id}`, {
+        method: 'PATCH'
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || 'Something went wrong.');
+        return;
+      }
+
+      await loadExperiments();
+      fetchResults(id);
+
+    } catch (e) {
+      alert('Could not reach the API. Is Flask running?');
+    }
+  }
 
     // INIT 
     loadExperiments();
